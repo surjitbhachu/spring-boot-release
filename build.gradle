@@ -17,9 +17,21 @@ scmVersion {
     }
 }
 
+def getAxionVersion() {
+    def ctx = pl.allegro.tech.build.axion.release.infrastructure.di.GradleAwareContext.create(project)
+    def rules = ctx.rules
+    scmVersion.versionService.currentVersion(
+            rules.version,
+            rules.tag,
+            rules.nextVersion
+    )
+}
+
+
 tasks.named("generateChangelog") {
 	outputFile = new File(project.projectDir, 'CHANGELOG.md')
 	repository = "surjitbhachu/spring-boot-release"
+	previousRevision = "v"+scmVersion.previousVersion
 	githubToken = System.getenv('MY_GITHUB_TOKEN')
 }
 
