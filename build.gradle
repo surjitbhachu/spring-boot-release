@@ -2,6 +2,7 @@ plugins {
 	id 'org.springframework.boot' version '2.5.5'
 	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 	id 'pl.allegro.tech.build.axion-release' version '1.13.3'
+	id 'org.shipkit.shipkit-changelog' version '1.1.15'
 	id 'java'
 }
 
@@ -12,8 +13,14 @@ sourceCompatibility = '11'
 scmVersion {
     repository {
         scmVersion.repository.customUsername = System.getenv('MY_GITHUB_USERNAME')
-        scmVersion.repository.customPassword = System.getenv('MY_GITHUB_PASSWORD')
+        scmVersion.repository.customPassword = System.getenv('MY_GITHUB_TOKEN')
     }
+}
+
+tasks.named("generateChangelog") {
+	outputFile = new File(project.projectDir, 'CHANGELOG.md')
+	repository = "surjitbhachu/spring-boot-release"
+	githubToken = System.getenv('MY_GITHUB_TOKEN')
 }
 
 repositories {
