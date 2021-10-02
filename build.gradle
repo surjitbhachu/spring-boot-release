@@ -3,6 +3,7 @@ plugins {
 	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 	id 'pl.allegro.tech.build.axion-release' version '1.13.3'
 	id 'org.shipkit.shipkit-changelog' version '1.1.15'
+	id 'org.shipkit.shipkit-github-release' version '1.1.15'
 	id 'java'
 }
 
@@ -17,10 +18,23 @@ scmVersion {
     }
 }
 
+tasks.named("test") {
+	System.out.println("Current version " + scmVersion.version)
+	System.out.println("Previous version " + scmVersion.previousVersion)
+	
+
+}
+
 tasks.named("generateChangelog") {
-	outputFile = new File(project.projectDir, 'CHANGELOG.md')
 	repository = "surjitbhachu/spring-boot-release"
 	previousRevision = "v"+scmVersion.previousVersion
+	githubToken = System.getenv('MY_GITHUB_TOKEN')
+}
+
+tasks.named("githubRelease") {
+	dependsOn tasks.named("generateChangelog")
+	repository = "surjitbhachu/spring-boot-release"
+	changelog = tasks.named("generateChangelog").get().outputFile
 	githubToken = System.getenv('MY_GITHUB_TOKEN')
 }
 
