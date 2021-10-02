@@ -2,9 +2,9 @@ plugins {
 	id 'org.springframework.boot' version '2.5.5'
 	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 	id 'pl.allegro.tech.build.axion-release' version '1.13.3'
-	id 'org.shipkit.shipkit-changelog' version '1.1.15'
-	id 'org.shipkit.shipkit-github-release' version '1.1.15'
-	  id 'com.github.rukgar.gradle-conventional-changelog' version '0.3.2'
+	//id 'org.shipkit.shipkit-changelog' version '1.1.15'
+	//id 'org.shipkit.shipkit-github-release' version '1.1.15'
+	 id("org.hildan.github.changelog") version "1.8.0"
 	id 'java'
 }
 
@@ -19,9 +19,6 @@ scmVersion {
     }
 }
 
-changelog {
-	from scmVersion.previousVersion
-}
 
 tasks.named("test") {
 	System.out.println("Current version " + scmVersion.version)
@@ -29,6 +26,15 @@ tasks.named("test") {
 	
 
 }
+
+changelog {
+    githubUser =  "surjitbhachu"
+    githubToken =  System.getenv('MY_GITHUB_TOKEN')
+    githubRepository = rootProject.name
+    
+}
+
+/*
 
 tasks.named("generateChangelog") {
 	repository = "surjitbhachu/spring-boot-release"
@@ -42,6 +48,7 @@ tasks.named("githubRelease") {
 	changelog = tasks.named("generateChangelog").get().outputFile
 	githubToken = System.getenv('MY_GITHUB_TOKEN')
 }
+*/
 
 repositories {
 	mavenCentral()
